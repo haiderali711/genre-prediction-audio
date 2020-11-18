@@ -34,13 +34,14 @@ MEDIA_URL = '/media/'
 # Application definition
 
 INSTALLED_APPS = [
-    'genre_classification',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'genre_classification',
+    'users',
 ]
 
 MIDDLEWARE = [

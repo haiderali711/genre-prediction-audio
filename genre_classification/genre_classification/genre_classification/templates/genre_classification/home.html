@@ -1,0 +1,17 @@
+{% extends 'genre_classification/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+  {% include 'genre_classification/admin.html' %}
+
+{% else %}
+
+  {% include 'genre_classification/user.html' %}
+  
+{% endif %}
+{% endblock %}
+
+
