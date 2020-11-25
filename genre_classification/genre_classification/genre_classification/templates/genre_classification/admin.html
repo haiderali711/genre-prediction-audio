@@ -1,8 +1,0 @@
-Hi {{ user.username }}!
-<p><a href="{% url 'logout' %}">Log Out</a></p>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
