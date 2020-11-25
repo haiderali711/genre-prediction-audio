@@ -8,7 +8,7 @@ import librosa
 import numpy as np
 
 
-def model_form_upload(request):
+def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -37,7 +37,7 @@ def model_form_upload(request):
             #return HttpResponse(prediction)
             prediction = "?"
 
-            return render(request, 'genre_classification/predictions.html',{'form': form, 'prediction': prediction})
+            return render(request, 'genre_classification/predictions.html', {'form': form, 'prediction': prediction})
     else:
         form = DocumentForm()
     return render(request, 'genre_classification/home.html', {

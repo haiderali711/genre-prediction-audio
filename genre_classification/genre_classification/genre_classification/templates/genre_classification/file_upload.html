@@ -1,0 +1,16 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+<!--    <div class="text-sm text-red-500">{{form.non_field_errors}}</div>-->
+
+<!--    <label for="id_document">Document:</label>-->
+<!--    <input type="file" name="document" required id="id_document">-->
+    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+        <div class="rounded-md shadow">
+            <button
+                    class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+                Upload File
+            </button>
+        </div>
+    </div>
+</form>

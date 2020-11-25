@@ -1,17 +1,106 @@
 {% extends 'genre_classification/base.html' %}
 
-{% block title %}Home{% endblock %}
-
 {% block content %}
-{% if user.is_authenticated %}
+<div class="relative bg-white overflow-hidden">
+    <div class="mx-auto" style="max-width: 100rem">
+        <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:w-full lg:pb-28 xl:pb-32"
+             style="max-width: 50rem;">
+            <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+                 fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="50,0 100,0 50,100 0,100"/>
+            </svg>
 
-  {% include 'genre_classification/admin.html' %}
+            <div class="relative pt-6 px-4 sm:px-6 lg:px-8">
+                <nav class="relative flex items-center justify-between sm:h-10" aria-label="Global">
+                    <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
+                        <div class="flex items-center justify-between w-full md:w-auto">
+                            <a href="{% url 'home' %}">
+                                <span class="sr-only">Workflow</span>
+                                <img class="h-8 w-auto sm:h-10"
+                                     src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg">
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        {% if user.is_authenticated == False %}
+                        <a href="{% url 'login' %}"
+                           class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
+                            Admin Login
+                        </a>
+                        {% else %}
+                        <a href="{% url 'logout' %}"
+                           class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
+                            Logout
+                        </a>
+                        {% endif %}
+                    </div>
+                </nav>
+            </div>
 
-{% else %}
+            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+                    <h3 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-5xl">
+                        <div>Music Genera Recognition</div>
+                        <span class="text-blue-600">online platform</span>
+                    </h3>
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit
+                        sunt amet fugiat veniam occaecat fugiat aliqua.
+                    </p>
 
-  {% include 'genre_classification/user.html' %}
-  
-{% endif %}
+                    {% if request.get_full_path == "/" %}
+                        {% include 'genre_classification/file_upload.html' %}
+                    {% endif %}
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        {% if request.get_full_path == "/" %}
+        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+             src="https://cdn.dribbble.com/users/19849/screenshots/11401249/media/3387dd438c71a1f81749c0c0b4588f26.png"
+             alt="">
+        {% elif request.get_full_path == "/login/" %}
+        {% include 'genre_classification/admin_login.html' %}
+        {% endif %}
+    </div>
+</div>
+
+<footer class="flex justify-center px-4 text-gray-100" style="background-color: rgb(39, 47, 62)">
+    <div class="container py-6">
+        <h1 class="text-center text-lg font-bold lg:text-2xl">
+            Join our newsletter and never miss <br> out on new updates.
+        </h1>
+
+        <div class="flex justify-center mt-6">
+            <div class="bg-white rounded-lg">
+                <div class="flex flex-wrap justify-between md:flex-row">
+                    <input type="email" class="m-1 p-2 appearance-none text-gray-700 text-sm focus:outline-none"
+                           placeholder="Enter your email">
+                    <button class="w-full m-1 p-3 text-sm bg-gray-800 rounded-lg font-semibold bg-blue-600 hover:bg-blue-700 uppercase lg:w-auto">
+                        subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="h-px mt-6 bg-gray-700 border-none">
+
+        <div class="flex flex-col items-center justify-between mt-6 md:flex-row">
+            <div>
+                <span class="sr-only">Workflow</span>
+                <img class="h-8 w-auto sm:h-10"
+                     src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg">
+            </div>
+            <div class="flex mt-4 md:m-0">
+                <div class="-mx-4">
+                    <a href="#" class="px-4 text-sm">About</a>
+                    <a href="#" class="px-4 text-sm">Blog</a>
+                    <a href="#" class="px-4 text-sm">News</a>
+                    <a href="#" class="px-4 text-sm">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 {% endblock %}
-
-
