@@ -27,9 +27,18 @@ filename text PRIMARY KEY,
 """
 
 # Build table
-header = 'filename chroma_stft rmse spectral_centroid spectral_bandwidth rolloff zero_crossing_rate'
+header = 'filename '
+header += 'chroma_stft_mean chroma_stft_var '
+header += 'rmse_mean rmse_var '
+header += 'spectral_centroid_mean spectral_centroid_var '
+header += 'spectral_bandwidth_mean spectral_bandwidth_var '
+header += 'rolloff_mean rolloff_var '
+header += 'zero_crossing_rate_mean zero_crossing_rate_var '
+header += 'harmonics_mean harmonics_var '
+header += 'perceptual_mean perceptual_var '
+header += 'tempo '
 for i in range(1, 21):
-    header += f' mfcc{i}'
+    header += f' mfcc{i}_mean mfcc{i}_var'
 header += f' genre'
 header = header.split()
 for l in header[1:-1]:
