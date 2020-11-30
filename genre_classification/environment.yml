@@ -1,0 +1,30 @@
+name: example
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy
+  - numba
+  - llvmlite
+  - asgiref
+  - certifi
+  - cycler
+  - django=3.1.3
+  - joblib
+  - kiwisolver
+  - matplotlib
+  - olefile
+  - pandas
+  - Pillow
+  - pyparsing
+  - python-dateutil
+  - pytz
+  - scikit-learn
+  - scipy
+  - six
+  - sqlparse
+  - threadpoolctl
+  - tornado
+  - gunicorn
+  - sip
+  - librosa
