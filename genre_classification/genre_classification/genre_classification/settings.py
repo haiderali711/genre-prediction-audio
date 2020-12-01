@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'genre_classification',
-    'users',
+    'admins'
 ]
 
 MIDDLEWARE = [
@@ -124,6 +124,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'admin'
 
 LOGOUT_REDIRECT_URL = 'home'
