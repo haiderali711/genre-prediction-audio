@@ -19,7 +19,7 @@ WORKDIR /opt/sources/
 RUN ls -a
 COPY environment.yml .
 RUN conda env create -f environment.yml
-
+RUN conda update --all
 
 # Install conda-pack:
 RUN conda install -c conda-forge conda-pack
