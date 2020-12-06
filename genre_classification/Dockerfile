@@ -55,6 +55,7 @@ EXPOSE 8000
 # for the django project
 RUN source /venv/bin/activate && \
 	python3 manage.py makemigrations && \
+	python3 manage.py sqlmigrate admins 0001 && \
 	python3 manage.py migrate
 
 

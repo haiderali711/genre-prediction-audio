@@ -28,3 +28,4 @@ dependencies:
   - gunicorn
   - sip
   - librosa
+  - keras
