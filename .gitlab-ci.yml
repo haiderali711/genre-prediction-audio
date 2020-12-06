@@ -2,11 +2,11 @@
 image: docker:latest
 
 # Details about how to connect to the Docker service to run this build.
-# variables:
-#   DOCKER_HOST: tcp://172.17.0.1:2375
-#   DOCKER_TLS_CERTDIR: ""
-#   DOCKER_DRIVER: overlay2
-#   DOCKER_BUILDKIT: 1
+variables:
+  DOCKER_HOST: tcp://172.17.0.1:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  DOCKER_BUILDKIT: 1
 
 services:
   - name: docker:18-dind
@@ -20,25 +20,25 @@ stages:
 build-and-test:
   # Display information before we start the build.
   before_script:
-    - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
+    # - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
     - docker-build
   stage: build
   script:
+    - ls -a
     - docker build --pull --no-cache -f Dockerfile .
-
-# This section describes what shall be done to deploy artefacts from the project.
-push-to-registry:
-  before_script:
-    - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
-    - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  tags:
-    - docker-build
-  stage: deploy
-  only:
-    - master
-  script:
-    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push "."
+# # This section describes what shall be done to deploy artefacts from the project.
+# push-to-registry:
+#   before_script:
+#     - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
+#     - docker info
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#   tags:
+#     - docker-build
+#   stage: deploy
+#   only:
+#     - master
+#   script:
+#     - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push "."
