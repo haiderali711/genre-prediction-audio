@@ -28,4 +28,6 @@ dependencies:
   - gunicorn
   - sip
   - librosa
-  - keras
+  - keras=2.4.3
+  - tensorflow
+  #2.3.1
