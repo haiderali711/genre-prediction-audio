@@ -20,7 +20,7 @@ stages:
 build-and-test:
   # Display information before we start the build.
   before_script:
-    - cd  genre-recognition/genre_classification
+    - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
@@ -32,7 +32,7 @@ build-and-test:
 # This section describes what shall be done to deploy artefacts from the project.
 push-to-registry:
   before_script:
-    - cd  genre-recognition/genre_classification
+    - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
