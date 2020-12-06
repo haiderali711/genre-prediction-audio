@@ -29,8 +29,8 @@ build-and-test:
     - docker-build
   stage: build
   script:
-    - ls -a
-    - docker build --pull --no-cache -f ./genre_classification/Dockerfile .
+    - cd genre_classification
+    - docker build --pull --no-cache .
 
 # This section describes what shall be done to deploy artefacts from the project.
 push-to-registry:
@@ -44,4 +44,4 @@ push-to-registry:
     - master
   script:
     - cd genre_classification
-    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push -f ./genre_classification/Dockerfile .
+    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push "."
