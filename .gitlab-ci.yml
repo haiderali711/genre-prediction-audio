@@ -23,7 +23,6 @@ stages:
 build-and-test:
   # Display information before we start the build.
   before_script:
-    # - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
@@ -31,17 +30,17 @@ build-and-test:
   stage: build
   script:
     - ls -a
-    - docker build --pull --no-cache -f ./genre-recognition/genre_classification/Dockerfile .
-# # This section describes what shall be done to deploy artefacts from the project.
-# push-to-registry:
-#   before_script:
-#     - cd $CI_PROJECT_PATH/genre-recognition/genre_classification
-#     - docker info
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#   tags:
-#     - docker-build
-#   stage: deploy
-#   only:
-#     - master
-#   script:
-#     - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push "."
+    - docker build --pull --no-cache -f ./genre_classification/Dockerfile .
+
+# This section describes what shall be done to deploy artefacts from the project.
+push-to-registry:
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  tags:
+    - docker-build
+  stage: deploy
+  only:
+    - master
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push -f ./genre_classification/Dockerfile .
