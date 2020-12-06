@@ -28,6 +28,8 @@ build-and-test:
   tags:
     - docker-build
   stage: build
+  except:
+    - master
   script:
     - cd genre_classification
     - docker build --pull --no-cache .
@@ -44,4 +46,5 @@ push-to-registry:
     - master
   script:
     - cd genre_classification
-    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push "."
+    - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA"
