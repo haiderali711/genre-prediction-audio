@@ -27,8 +27,7 @@ build-and-test:
     - docker-build
   stage: build
   script:
-    - ls -a
-    - docker build --pull --no-cache -f Dockerfile .
+    - docker build --pull --no-cache -f ./genre-recognition/genre_classification/Dockerfile .
 # # This section describes what shall be done to deploy artefacts from the project.
 # push-to-registry:
 #   before_script:
