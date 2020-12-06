@@ -12,7 +12,11 @@ ENV LANG C.UTF-8
 RUN conda update -n base -c defaults conda
 
 # Install the package as normal:
-COPY environment.yml .
+
+#Copy everything from the repostory folder to sources folder 
+ADD . /opt/sources
+WORKDIR /opt/sources/
+# COPY environment.yml .
 RUN conda env create -f environment.yml
 
 
