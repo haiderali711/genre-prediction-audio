@@ -3,16 +3,16 @@ image: docker:latest
 
 # Details about how to connect to the Docker service to run this build.
 variables:
-  DOCKER_HOST: tcp://docker:2375
+  # DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   # Create the certificates inside this directory for both the server
   # and client. The certificates used by the client will be created in
   # /certs/client so we only need to share this directory with the
   # volume mount in `config.toml`.
-  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_CERTDIR: ""
 
 services:
-  - name: docker:dind
+  - name: docker:19.03.0-dind
 
 stages:
   - build
