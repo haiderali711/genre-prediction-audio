@@ -43,4 +43,5 @@ push-to-registry:
   only:
     - master
   script:
+    - cd genre_classification
     - docker build -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_SHA" --push -f ./genre_classification/Dockerfile .
