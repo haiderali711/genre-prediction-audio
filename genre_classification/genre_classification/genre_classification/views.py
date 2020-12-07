@@ -21,7 +21,7 @@ def handle_file_upload(request):
             tuple_data = extract(filename)
 
             # Load ML model from file
-            model = models.load_model("genre_classification/models/model_1")
+            model = models.load_model("genre_classification/models/model_1/prediction_model")
 
             # Convert tuple to numpy array
             track = np.asarray(tuple_data).astype(np.float)
@@ -30,7 +30,7 @@ def handle_file_upload(request):
             n_features = track.shape[0]
 
             # Scale features before prediction by importing scaler  
-            scaler = joblib.load('genre_classification/models/model_1/scaler.bin')
+            scaler = joblib.load('genre_classification/models/model_1/data_scaler/scaler.bin')
             track_scaled = scaler.transform(track.reshape(1, -1))
 
             # Make prediction
@@ -46,7 +46,7 @@ def handle_file_upload(request):
 
             encoder = LabelEncoder()
             # Load encoder classes to retrieve the labels
-            encoder.classes_ = np.load('genre_classification/models/model_1/classes.npy')
+            encoder.classes_ = np.load('genre_classification/models/model_1/label_encoder/classes.npy')
             
             # restore np.load for future normal usage
             np.load = np_load_old
