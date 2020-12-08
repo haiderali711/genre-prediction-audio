@@ -1,18 +1,21 @@
+# How to create Docker container:
 
-## How to create Docker container: 
+### You should have Docker installed.
 
-1. You should have Docker installed. 
-    ```bash
-	# Run the following to create a docker Image 
+```bash
+# Run the following to create a docker Image
 
-    	docker build -t djangoapp .
-	
-	# Run the following to start the Web app from a docker container 
+	docker build -t djangoapp .
+```
 
-	docker run -p 8000:8000 -i -t djangoapp  
-	
-	#Open the following link in the browser to access the application 
-	
-	http://localhost:8000
-    ```
+```bash
+# Run the following to start the Web app from a docker container
 
+   	docker run -p 8000:8000 -i -t djangoapp
+```
+
+```bash
+#Open the following link in the browser to access the application
+
+   	http://localhost:8000
+```
