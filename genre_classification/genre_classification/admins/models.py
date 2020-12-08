@@ -1,14 +1,18 @@
 import os
 
 from django.db import models
-
+from django.forms import ValidationError 
 
 class MLModel(models.Model):
+    def validate_file_extension(value):
+        if not value.name.endswith('.db'):
+            raise ValidationError(u'Only .db files are allowed!')
+    
     file_name = models.FilePathField()
-    db_file_name = models.FilePathField()
-    created_on = models.DateField()
+    db = models.FileField(upload_to='', validators=[validate_file_extension])
+    created_on = models.DateTimeField(auto_now_add=True)
     accuracy = models.FloatField()
-    no_of_tracks = models.IntegerField()
+    no_of_tracks = 888
     # weights = models.
     active = models.BooleanField()
 
