@@ -36,4 +36,4 @@ class MLModel(models.Model):
         return self.no_of_tracks
 
     def __str__(self):
-        return self.file_name
+        return self.file_name.__str__()
