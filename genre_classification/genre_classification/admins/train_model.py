@@ -28,7 +28,7 @@ def create_db_connection(db_file):
     connection = None
     try:
         connection = sqlite3.connect(db_file)
-    except Error as e:
+    except sqlite3.Error as e:
         print(e)
 
     return connection
@@ -40,11 +40,11 @@ def create_folder(folder):
         if e.errno != errno.EEXIST:
             raise
 
-def train(db, model_name):
+def create_dirtree(model_name):
     ###########################
     ### Step 1: Create dirs ###
     ###########################
-    root_path = 'models'
+    root_path = 'admins/models'
     model_path = os.path.join(root_path, model_name)
     
     create_folder(root_path)    
@@ -57,7 +57,8 @@ def train(db, model_name):
     folders = ['data_scaler','database','label_encoder','prediction_model']
     for folder in folders:
         create_folder(os.path.join(model_path,folder))
-    
+
+def train(db, model_name):    
     ############################################
     ### Step 2: Retrieve data from SQLite db ###
     ############################################
@@ -82,7 +83,7 @@ def train(db, model_name):
     ### Step 3: Save encoder ###
     ############################
 
-    np.save(f'models/{model_name}/label_encoder/classes.npy', encoder.classes_)
+    np.save(f'admins/models/{model_name}/label_encoder/classes.npy', encoder.classes_)
 
     #############################################
     ### Step 4: Transform and select features ###
@@ -113,7 +114,7 @@ def train(db, model_name):
     ### Step 6: Save scaler ###
     ###########################
 
-    joblib.dump(scaler, f'models/{model_name}/data_scaler/scaler.bin', compress=True)
+    joblib.dump(scaler, f'admins/models/{model_name}/data_scaler/scaler.bin', compress=True)
 
     ###########################
     ### Step 7: Train model ###
@@ -154,9 +155,9 @@ def train(db, model_name):
     ###########################
 
     print("Saving prediction model...")
-    model.save(f'models/{model_name}/prediction_model')
+    model.save(f'admins/models/{model_name}/prediction_model')
     print("Done")
 
     test_loss, test_acc = model.evaluate(X_test,y_test)
 
-    return test_acc
+    return test_acc, y.shape[0]

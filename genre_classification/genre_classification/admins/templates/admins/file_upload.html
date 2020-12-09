@@ -1,8 +1,9 @@
 <form method="post" enctype="multipart/form-data" class="mt-4">
     {% csrf_token %}
+    
     <div class="flex text-base">
 
-        <input id="model_name" type="text" name="name_field" placeholder="Model name">
+        <input id="model_name" type="text" name="model_name" placeholder="Model name">
         
         <label for="file-upload"
                class="flex items-center relative cursor-pointer bg-white rounded-md font-medium text-blue-600">
@@ -15,7 +16,7 @@
                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <span class="text-sm">Upload an SQLite database</span>
-                <input id="file-upload" name="document" required type="file" class="sr-only">
+                <input id="file-upload" name="db" required type="file" class="sr-only">
                 </span>
                 {% if form.errors %}
                     <span class="text-xs text-red-400">Only .db files supported</span>

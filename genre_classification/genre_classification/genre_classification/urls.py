@@ -28,6 +28,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='genre_classification/home.html'), name='login'),
     path('admin/', admin_view, name='admin'),
     path('', handle_file_upload, name='home'),
+    path('django/admin', admin.site.urls),
 ]
 
 if settings.DEBUG:

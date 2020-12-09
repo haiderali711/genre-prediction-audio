@@ -1,8 +1,13 @@
 from django import forms
-from admins.models import SQLiteCollection
+from admins.models import MLModel, MLModelFile
 
-
-class CollectionForm(forms.ModelForm):
+class RetrainForm(forms.ModelForm):
     class Meta:
-        model = SQLiteCollection
-        fields = ('document', )
+        model = MLModel
+        fields = ('model_name', )
+
+class RetrainFormFile(forms.ModelForm):
+    class Meta:
+        model = MLModelFile
+        fields = ('db', )
+
