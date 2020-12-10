@@ -4,10 +4,12 @@ import uuid
 from django.db import models
 from django.forms import ValidationError 
 
+
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join(filename)
+
 
 class MLModel(models.Model):
     model_name = models.CharField(max_length=50)
@@ -20,22 +22,9 @@ class MLModel(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def activate(self):
-        model_file = os.open(self.file_name.__str__(), os.O_RDONLY)
-        self.active = True
-        print(model_file)
-
-    def deactivate(self):
-        self.active = False
-
-    def get_accuracy(self):
-        return self.accuracy
-
-    def get_no_of_tracks(self):
-        return self.no_of_tracks
-
     def __str__(self):
         return self.model_name
+
 
 # Model for database file
 # we actually do not .save() any of the database files to the django db

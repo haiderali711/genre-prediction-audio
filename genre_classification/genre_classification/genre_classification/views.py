@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras import models
 from sklearn import preprocessing
 
+
 def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
