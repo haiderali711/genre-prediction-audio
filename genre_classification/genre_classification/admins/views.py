@@ -1,3 +1,10 @@
+
+import os 
+from pathlib import Path
+from distutils.dir_util import copy_tree
+import shutil
+
+
 from django.shortcuts import render, redirect
 
 from .forms import RetrainForm, RetrainFormFile
@@ -28,7 +35,8 @@ def admin_view(request):
             # Create the directory tree for the model
             try:
                 create_dirtree(str(model))
-
+                
+                # Deactivate the previous model before setting the new one as active
                 deactivate_model(active_model.model_name)
 
                 # File is not saved on disk so
@@ -74,9 +82,23 @@ def activate_model(request):
 
     deactivate_model(active_model_name)
     MLModel.objects.filter(model_name=model_name_to_activate).update(active=True)
-
+    move_model_files(model_name_to_activate)
     return redirect('/admin')
 
 
 def deactivate_model(model_name):
     MLModel.objects.filter(model_name=model_name).update(active=False)
+
+
+# move the model folder to the applied model folder in genre classification folder
+def move_model_files(model_name_to_activate):
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    trained_path = os.path.join(BASE_DIR,('admins/models/'+model_name_to_activate))
+    destination_path =  os.path.join(BASE_DIR,('genre_classification/models/model_1'))
+    print('TRAINED : ',trained_path)
+    print('DESTINATION : ',destination_path)
+
+    # Remove the whole destination folder
+    shutil.rmtree(destination_path)
+    # copy the new model in the folder
+    copy_tree(trained_path,destination_path)
