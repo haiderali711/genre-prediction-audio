@@ -17,6 +17,7 @@ from keras import callbacks
 
 import joblib
 
+
 def create_db_connection(db_file):
     """
     Create a database connection to the SQLite database
@@ -33,12 +34,14 @@ def create_db_connection(db_file):
 
     return connection
 
+
 def create_folder(folder):
     try:
         os.mkdir(folder)
     except OSError as e:
         if e.errno != errno.EEXIST:
             raise
+
 
 def create_dirtree(model_name):
     ###########################
@@ -57,6 +60,7 @@ def create_dirtree(model_name):
     folders = ['data_scaler','database','label_encoder','prediction_model']
     for folder in folders:
         create_folder(os.path.join(model_path,folder))
+
 
 def train(db, model_name):    
     ############################################

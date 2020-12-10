@@ -20,13 +20,13 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from genre_classification.views import handle_file_upload
-from admins.views import admin_view
+from admins.views import admin_view, activate_model
 
 urlpatterns = [
-    path('root/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='genre_classification/home.html'), name='login'),
     path('admin/', admin_view, name='admin'),
+    path('activate_model/', activate_model, name='activate_model'),
     path('', handle_file_upload, name='home'),
     path('django/admin', admin.site.urls),
 ]
