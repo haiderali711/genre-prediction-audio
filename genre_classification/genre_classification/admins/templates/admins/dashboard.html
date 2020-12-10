@@ -1,14 +1,19 @@
 <div x-ref="dashboard" class="container mx-auto px-6 py-8">
-    <h3 class="text-gray-700 text-3xl font-medium">Dashboard</h3>
+    <!-- <h3 class="text-gray-700 text-3xl font-medium">Dashboard</h3> -->
 
     {% include 'admins/file_upload.html' %}
     <span class="text-red-600">{{errors}}</span>
 
+    <br />
+        <h1 class="text-center text-gray-700 text-3xl font-medium ">Active Model</h1>
+    <br />
+
     <div class="mt-4">
         <div class="flex flex-wrap -mx-6">
+
             <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
                 <div class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-indigo-600 bg-opacity-75">
+                    <!-- <div class="p-3 rounded-full bg-indigo-600 bg-opacity-75">
                         <svg class="h-8 w-8 text-white" viewBox="0 0 28 30" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -30,18 +35,21 @@
                                     d="M6.64896 18.0949C5.98058 19.3671 5.59999 20.8312 5.59999 22.3889V26.8222H1.39999V22.3889C1.39999 19.9404 3.2804 17.9556 5.59999 17.9556C5.96219 17.9556 6.31367 18.0039 6.64896 18.0949Z"
                                     fill="currentColor"></path>
                         </svg>
-                    </div>
+
+                    </div> -->
 
                     <div class="mx-5">
-                        <h4 class="text-2xl font-semibold text-gray-700">8,282</h4>
-                        <div class="text-gray-500"></div>
+                        <div class="text-gray-500 font-semibold ">
+                            <h2 class="text-2xl font-semibold text-gray-700">Model Name : </h2>
+                                <h3>{{active_model.model_name}}</h3>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="w-full mt-6 px-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
                 <div class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-orange-600 bg-opacity-75">
+                    <!-- <div class="p-3 rounded-full bg-orange-600 bg-opacity-75">
                         <svg class="h-8 w-8 text-white" viewBox="0 0 28 28" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -54,18 +62,18 @@
                                     d="M9.1 25.2C10.2598 25.2 11.2 24.2598 11.2 23.1C11.2 21.9402 10.2598 21 9.1 21C7.9402 21 7 21.9402 7 23.1C7 24.2598 7.9402 25.2 9.1 25.2Z"
                                     fill="currentColor"></path>
                         </svg>
-                    </div>
+                    </div> -->
 
                     <div class="mx-5">
-                        <h4 class="text-2xl font-semibold text-gray-700">200,521</h4>
-                        <div class="text-gray-500">Total Orders</div>
+                        <h2 class="text-2xl font-semibold text-gray-700">Accuracy </h4>
+                        <div class="text-gray-500">{{active_model.accuracy}}</div>
                     </div>
                 </div>
             </div>
 
             <div class="w-full mt-6 px-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
                 <div class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white">
-                    <div class="p-3 rounded-full bg-pink-600 bg-opacity-75">
+                    <!-- <div class="p-3 rounded-full bg-pink-600 bg-opacity-75">
                         <svg class="h-8 w-8 text-white" viewBox="0 0 28 28" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.99998 11.2H21L22.4 23.8H5.59998L6.99998 11.2Z"
@@ -75,11 +83,11 @@
                                     d="M9.79999 8.4C9.79999 6.08041 11.6804 4.2 14 4.2C16.3196 4.2 18.2 6.08041 18.2 8.4V12.6C18.2 14.9197 16.3196 16.8 14 16.8C11.6804 16.8 9.79999 14.9197 9.79999 12.6V8.4Z"
                                     stroke="currentColor" stroke-width="2"></path>
                         </svg>
-                    </div>
+                    </div> -->
 
                     <div class="mx-5">
-                        <h4 class="text-2xl font-semibold text-gray-700">215,542</h4>
-                        <div class="text-gray-500">Available Products</div>
+                        <h4 class="text-2xl font-semibold text-gray-700">N# Tracks</h4>
+                        <div class="text-gray-500">{{active_model.no_of_tracks}}</div>
                     </div>
                 </div>
             </div>
