@@ -3,7 +3,7 @@ image: docker:latest
 
 # Details about how to connect to the Docker service to run this build.
 variables:
-  # DOCKER_HOST: tcp://docker:2375
+  DOCKER_HOST: tcp://localhost:2375
   DOCKER_DRIVER: overlay2
   # Create the certificates inside this directory for both the server
   # and client. The certificates used by the client will be created in
@@ -15,12 +15,13 @@ services:
   - name: docker:19.03.0-dind
 
 stages:
+  - test-build
   - build
   - deploy
   # - test
 
 # This section describes what shall be done to build and test the project.
-build-and-test:
+build-on-test-branch:
   # Display information before we start the build.
   before_script:
     - docker info
@@ -29,7 +30,7 @@ build-and-test:
 
   tags:
     - kubernetes
-  stage: build
+  stage: test-build
   except:
     - master
   script:
