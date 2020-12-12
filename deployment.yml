@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: frontend
+  namespace: default
+
+labels:
+  app: frontend
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: registry.git.chalmers.se/courses/dit824/2021/group01/genre-recognition:$CI_COMMIT_TAG
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+
+      imagePullSecrets:
+        - name: regcred
