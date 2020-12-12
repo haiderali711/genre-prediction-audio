@@ -2,26 +2,25 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: frontend
+  name: django-app
   namespace: default
-
-labels:
-  app: frontend
+  labels:
+    app: django-app
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: django-app
 
   template:
     metadata:
       labels:
-        app: frontend
+        app: django-app
     spec:
       containers:
-        - name: frontend
-          image: registry.git.chalmers.se/courses/dit824/2021/group01/genre-recognition:$CI_COMMIT_TAG
+        - name: django-app
+          image: ${CI_REGISTRY}/${CI_PROJECT_PATH}:$CI_COMMIT_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
