@@ -25,7 +25,7 @@ build-feature-branch:
   # Display information before we start the build.
   before_script:
     - docker info
-    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   rules:
     - if: $CI_COMMIT_TAG == null
   tags:
@@ -39,7 +39,7 @@ build-feature-branch:
 build-to-registry:
   before_script:
     - docker info
-    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
     - kubernetes
   stage: build
@@ -58,5 +58,5 @@ release:
   rules:
     - if: $CI_COMMIT_TAG != null && $CI_COMMIT_TAG =~ /^v\d[.]\d[.]\d$/
   script:
-    - envsubst \$CI_COMMIT_TAG docker-deployment.yaml
+    # - envsubst \$CI_COMMIT_TAG docker-deployment.yaml
     - kubectl apply -f docker-deployment.yaml
