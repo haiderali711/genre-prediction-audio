@@ -45,8 +45,6 @@ build-to-registry:
   stage: deploy
   rules:
     - if: $CI_COMMIT_TAG != null && $CI_COMMIT_TAG =~ /^v\d[.]\d[.]\d$/
-  only:
-    - master
   script:
     - cd genre_classification
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:"$CI_COMMIT_TAG" .
@@ -57,8 +55,8 @@ release:
   stage: deploy
   environment:
     name: default
-  only:
-    - master
+  rules:
+    - if: $CI_COMMIT_TAG != null && $CI_COMMIT_TAG =~ /^v\d[.]\d[.]\d$/
   script:
     - envsubst \$CI_COMMIT_TAG < docker-deployment.yaml > deployment.yaml
     - kubectl apply -f deployment.yaml
