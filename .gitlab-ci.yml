@@ -51,7 +51,7 @@ build-to-registry:
     - docker push "$CI_REGISTRY_IMAGE":${CI_COMMIT_REF_NAME}
 
 release:
-  # image: thisiskj/kubectl-envsubst
+  image: thisiskj/kubectl-envsubst
   stage: deploy
   environment:
     name: default
@@ -60,5 +60,5 @@ release:
   rules:
     - if: $CI_COMMIT_TAG != null && $CI_COMMIT_TAG =~ /^v\d[.]\d[.]\d$/
   script:
-    # - envsubst \$CI_COMMIT_TAG docker-deployment.yaml
-    - kubectl apply -f docker-deployment.yaml
+    - envsubst \$CI_COMMIT_TAG deployment-template.yaml deployment.yaml
+    - kubectl apply -f deployment.yaml
