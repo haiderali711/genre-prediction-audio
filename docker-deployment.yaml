@@ -31,7 +31,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: django-app-loadbalancer-service
+  name: ingress-nginx-ingress-controller
 spec:
   selector:
     app: django-app
