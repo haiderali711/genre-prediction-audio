@@ -61,8 +61,5 @@ release:
     - if: $CI_COMMIT_TAG != null && $CI_COMMIT_TAG =~ /^v\d[.]\d[.]\d$/
   script:
     - ls -a
-    # Replace the registry image in the docker-deployment and save it as doployment.yaml
     - envsubst \$CI_REGISTRY_IMAGE < docker-deployment.yaml > deployment.yaml
-    # Replace the Commit tag in deployment and save it in deployment
-    - envsubst \$CI_COMMIT_TAG < deployment.yaml > deployment.yaml
     - kubectl apply -f deployment.yaml
