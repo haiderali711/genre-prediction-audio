@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: django-app
-  namespace: default
+  namespace: gitlab-managed-apps
   labels:
     app: django-app
 
@@ -31,7 +31,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: ingress-nginx-ingress-controller
+  name: django-app-loadbalancer-service
 spec:
   selector:
     app: django-app
