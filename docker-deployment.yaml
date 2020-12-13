@@ -27,11 +27,24 @@ spec:
 
       imagePullSecrets:
         - name: regcred
-# ---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: NodePortService
+  namespace: gitlab-managed-apps
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: django-app
+  type: NodePort
 # kind: Service
 # apiVersion: v1
 # metadata:
-#   name: django-app-loadbalancer-service
+#   name: ingress-nginx-ingress-controller
 # spec:
 #   selector:
 #     app: django-app
@@ -40,3 +53,4 @@ spec:
 #       port: 80
 #       targetPort: 8000
 #   type: LoadBalancer
+
