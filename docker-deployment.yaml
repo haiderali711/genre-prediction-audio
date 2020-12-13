@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: django-app
-  namespace: gitlab-managed-apps
+  namespace: default
   labels:
     app: django-app
 
