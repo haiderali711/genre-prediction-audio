@@ -5,7 +5,12 @@
     <span class="text-red-600">{{errors}}</span>
 
     <br />
-        <h1 class="text-center text-gray-700 text-3xl font-medium ">Active Model</h1>
+        <h1 class="text-center text-gray-700 text-3xl font-medium ">
+            {% if not active_model %}
+            No
+            {% endif %}
+            Active Model
+        </h1>
     <br />
 
     <div class="mt-4">

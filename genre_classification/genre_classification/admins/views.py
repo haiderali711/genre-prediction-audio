@@ -10,13 +10,18 @@ from django.shortcuts import render, redirect
 from .forms import RetrainForm, RetrainFormFile
 from .models import MLModel
 from .train_model import train, create_dirtree
+from .data_validation import validate_db
 
 
 def admin_view(request):
     # Retrieve list of models
     models = MLModel.objects.order_by('-created_on')
     errors = ''
-    active_model = MLModel.objects.get(active=True)
+
+    try:
+        active_model = MLModel.objects.get(active=True)
+    except Exception as e:
+        active_model = None
 
     if request.method == 'POST':
         print("Retrain request received..")
@@ -26,6 +31,7 @@ def admin_view(request):
         if form.is_valid() and form_file.is_valid():
             # Retrieve the db sitting in memory (not on disk)
             db = request.FILES['db']
+
             # Save the model without committing to db
             model = form.save(commit=False)
 
@@ -37,7 +43,8 @@ def admin_view(request):
                 create_dirtree(str(model))
                 
                 # Deactivate the previous model before setting the new one as active
-                deactivate_model(active_model.model_name)
+                if active_model != None:
+                    deactivate_model(active_model.model_name)
 
                 # File is not saved on disk so
                 # -> Save uploaded db to file in the dedicated folder /models/{model}/database/features.db
@@ -45,27 +52,35 @@ def admin_view(request):
                     for chunk in db.chunks():
                         destination.write(chunk)  # Add exception try catch to delete created folders
 
-                # Train our model with the new data and retrieve accuracy and number of tracks
-                print("Starting retraining..")
-                accuracy, n_tracks = train(db_path, str(model))
+                #######################
+                ### Data Validation ###
+                if validate_db(db_path):
+                    print("Data validation has been passed")
+                
+                    # Train our model with the new data and retrieve accuracy and number of tracks
+                    print("Starting retraining..")
+                    accuracy, n_tracks = train(db_path, str(model))
 
-                print('Statistics for new model "' + str(model) + '":')
-                print("Accuracy:", accuracy)
-                print("Tracks:", n_tracks)
+                    print('Statistics for new model "' + str(model) + '":')
+                    print("Accuracy:", accuracy)
+                    print("Tracks:", n_tracks)
 
-                # Injecting model object with attributes that we now have
-                model.accuracy = accuracy
-                model.no_of_tracks = n_tracks
-                model.active = True
+                    # Injecting model object with attributes that we now have
+                    model.accuracy = accuracy
+                    model.no_of_tracks = n_tracks
+                    model.active = True
 
-                active_model = model
+                    active_model = model
 
-                # TODO: unactivate the previously active model
-                # Committing model to django db
-                model.save()
+                    # TODO: unactivate the previously active model
+                    # Committing model to django db
+                    model.save()
 
-                print("New model saved!")
-
+                    print("New model saved!")
+                
+                else:
+                    print("Data validation has not been passed")
+                    raise Exception('The data is invalid (features are missing or malformed)')
             except Exception as e:
                 errors = e
 
