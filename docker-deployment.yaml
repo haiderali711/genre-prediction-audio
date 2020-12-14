@@ -31,7 +31,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: NodePortService
+  name: django-app-service
   namespace: gitlab-managed-apps
 spec:
   ports:
@@ -40,7 +40,9 @@ spec:
       targetPort: 8000
   selector:
     app: django-app
-  type: NodePort
+  type: ClusterIP
+
+
 # kind: Service
 # apiVersion: v1
 # metadata:
