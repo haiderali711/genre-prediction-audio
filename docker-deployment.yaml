@@ -28,16 +28,19 @@ spec:
       imagePullSecrets:
         - name: regcred
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ingress-nginx-ingress-controller
+  namespace: gitlab-managed-apps
 spec:
-  defaultBackend:
-    service:
-      name: django-app
-      port:
-        number: 8000
+  rules:
+  - host: 35.225.195.169.nip.io
+    http:
+      paths:
+      - backend:
+        serviceName: django-app-service
+        servicePort: 8000
 ---
 apiVersion: "v1"
 kind: "Service"
