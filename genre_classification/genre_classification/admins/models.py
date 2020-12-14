@@ -2,14 +2,12 @@ import os
 import uuid
 
 from django.db import models
-from django.forms import ValidationError 
-
+from admins.data_validation import validate_db_extension
 
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join(filename)
-
 
 class MLModel(models.Model):
     model_name = models.CharField(max_length=50)
@@ -25,11 +23,7 @@ class MLModel(models.Model):
     def __str__(self):
         return self.model_name
 
-
 # Model for database file
 # we actually do not .save() any of the database files to the django db
 class MLModelFile(models.Model):
-    def validate_file_extension(value):
-        if not value.name.endswith('.db'):
-            raise ValidationError(u'Only .db files are allowed!')
-    db = models.FileField(upload_to=get_file_path, validators=[validate_file_extension], default=None)
+    db = models.FileField(upload_to=get_file_path, validators=[validate_db_extension], default=None)
