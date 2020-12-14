@@ -63,6 +63,9 @@ RUN source /venv/bin/activate && \
 	python3 manage.py sqlmigrate admins 0001 && \
 	python3 manage.py migrate
 
+RUN source /venv/bin/activate && \
+	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('shab', 'shab@myproject.com', '1234'); User.objects.create_superuser('haider', 'haider@myproject.com', '1234'); User.objects.create_superuser('gagan', 'gagan@myproject.com', '1234')" | python3 manage.py shell
+
 
 # Start the gunicorn for running the application server
 
