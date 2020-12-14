@@ -17,6 +17,9 @@
                 {% if form.errors %}
                     <span class="text-xs text-red-400">Only .wav files supported</span>
                 {% endif %}
+                {% if error %}
+                    <span class="text-xs text-red-400">No model active</span>
+                {% endif %}
             </span>
             <button
                     class="ml-5 bg-white p-3 border border-gray-300 rounded-md shadow-sm leading-4 font-medium text-blue-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
