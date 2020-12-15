@@ -54,7 +54,7 @@ spec:
   rules:
     - http:
       paths:
-        - path: /?(.*)
+        - path:
           backend:
             serviceName: django-app-service
             servicePort: 8000
