@@ -34,6 +34,15 @@ def handle_file_upload(request):
 
                 # Make prediction
                 prediction = model.predict(track_scaled.reshape(-1, n_features))
+
+                # Normalization of the prediction values from 1-100
+                norm_pred = prediction_values_normalized(10000, prediction[0])
+                norm_pred = np.array(norm_pred).astype(int)
+                norm_pred = prediction_values_normalized(100, norm_pred)
+
+                print(norm_pred)
+
+                #
                 # Take the index of the prediction with highest certainty percentage
                 prediction = np.argmax(prediction[0])
 
@@ -51,18 +60,27 @@ def handle_file_upload(request):
                 np.load = np_load_old
 
                 # Inverse transform to get the label
-                # e = encoder
-                prediction = encoder.inverse_transform([prediction])
+                prediction = encoder.inverse_transform([prediction])[0]
 
-                # p = e.inverse_transform([prediction])
-                print(prediction)
+                # Labeling the percentage of each prediction 
+                label_percentages = np.array([[]])
+                index = 0
+                for norm in norm_pred:
+                    label_percentages = np.append(label_percentages, np.array([encoder.inverse_transform([index])[0],norm]))
+                    index += 1
+                label_percentages =  np.reshape(label_percentages,(10,2))
+
+                # Sort the numpy array in descending order according to the second column
+                label_percentages = label_percentages[label_percentages[:,1].argsort()[::-1]]
+                print("label_ percentages", label_percentages)
+
 
                 print("\n*************")
                 print(filename, "is", prediction)
                 print("*************\n")
 
                 return render(request, 'genre_classification/predictions.html',
-                              {'form': form, 'prediction': prediction[0]})
+                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages})
 
             except Exception as e:
                 form = DocumentForm()
@@ -73,3 +91,15 @@ def handle_file_upload(request):
     return render(request, 'genre_classification/home.html', {
         'form': form,
     })
+
+
+
+def prediction_values_normalized (range, prediction):
+    max_pred = max(prediction)
+    min_pred = min(prediction)
+    print(max_pred,min_pred,"newprint")
+    norm_pred = []
+    for item in prediction:
+        norm_pred.append(range*((item-min_pred)/(max_pred-min_pred)))
+
+    return norm_pred
