@@ -41,18 +41,21 @@ spec:
   selector:
     app: django-app
   type: ClusterIP
-
-
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: ingress-nginx-ingress-controller
-# spec:
-#   selector:
-#     app: django-app
-#   ports:
-#     - protocol: TCP
-#       port: 80
-#       targetPort: 8000
-#   type: LoadBalancer
-
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: ingress-nginx-ingress-controller
+  namespace: gitlab-managed-apps
+spec:
+  rules:
+    - http:
+      paths:
+        - path: /?(.*)
+          backend:
+            serviceName: django-app-service
+            servicePort: 8000
+          
