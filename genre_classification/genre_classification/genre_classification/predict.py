@@ -28,13 +28,11 @@ def predict(filename):
 
     # Make prediction
     prediction = model.predict(track_scaled.reshape(-1, n_features))
-    
     # Normalization of the prediction values from 1-100
     norm_pred = prediction_values_normalized(10000, prediction[0])
     norm_pred = np.array(norm_pred).astype(int)
-    norm_pred = prediction_values_normalized(100, norm_pred)
+    norm_pred = norm_pred/100
 
-    # print(norm_pred)
     
     # Take the index of the prediction with highest certainty percentage
     prediction = np.argmax(prediction[0])
@@ -70,7 +68,7 @@ def predict(filename):
     print("label_ percentages", label_percentages)
 
 
-    return prediction,label_percentages
+    return prediction,label_percentages,tuple_data
 
 
 def prediction_values_normalized (range, prediction):
