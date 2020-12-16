@@ -64,7 +64,7 @@ def admin_view(request):
                     print("Tracks:", n_tracks)
 
                     # Injecting model object with attributes that we now have
-                    model.accuracy = accuracy
+                    model.accuracy = accuracy * 100
                     model.no_of_tracks = n_tracks
                     model.active = True
 
