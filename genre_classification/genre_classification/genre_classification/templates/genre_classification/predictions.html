@@ -2,5 +2,14 @@
 
 {% block content %}
     <p>The genre of the song is {{prediction}}</p>
-    <p>{{label_percentages}}</p>
+
+    <div style="margin-left: 100px;">
+        {% for label in label_percentages %}
+            <div class="shadow bg-grey-light" style="max-width: 200px;">
+                <div class="bg-green-400 text-xs leading-none py-1 text-center text-black" style="width: {{label.1}}%">
+                    {{label.0}} {{label.1}}%
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
