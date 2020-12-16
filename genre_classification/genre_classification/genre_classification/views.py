@@ -31,8 +31,6 @@ def handle_file_upload(request):
                  # Feature extraction
                 prediction,label_percentages,tuple_data = predict(filename)
 
-                print(tuple_data)
-
                 print("\n*************")
                 print(filename, "is", prediction)
                 print("*************\n")
@@ -59,6 +57,8 @@ def handle_file_upload(request):
 def check_user_data_db():
     BASE_DIR = Path(__file__).resolve().parent.parent
     db_destination = os.path.join(BASE_DIR, 'admins/user_data/user_data.db')
+    print('Thjis is the directory : ',db_destination)
+
     try:
         # Connect / create database
         con = sqlite3.connect(db_destination)

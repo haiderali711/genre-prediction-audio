@@ -1,2 +1,3 @@
 models/
 !tests/test_db/genres.db
+!user_data/user_data.db
