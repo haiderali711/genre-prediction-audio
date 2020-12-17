@@ -61,14 +61,20 @@ def predict(filename):
     for norm in norm_pred:
         label_percentages = np.append(label_percentages, np.array([encoder.inverse_transform([index])[0],norm]))
         index += 1
-    label_percentages =  np.reshape(label_percentages,(10,2))
+    label_percentages = np.reshape(label_percentages,(10,2))
+    # we are sending both predicted label and it's percentage
+    max_perc = 0
+    for label in label_percentages:
+        if label[0] == prediction:
+            max_perc = label[1]
+
+    predicted_label = {'label': prediction, 'percentage': max_perc}
 
     # Sort the numpy array in descending order according to the second column
     label_percentages = label_percentages[label_percentages[:,1].argsort()[::-1]]
     print("label_ percentages", label_percentages)
 
-
-    return prediction,label_percentages,tuple_data
+    return predicted_label, label_percentages, tuple_data
 
 
 def prediction_values_normalized (range, prediction):

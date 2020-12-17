@@ -1,10 +1,7 @@
 {% extends 'genre_classification/base.html' %} {% block content %}
 
+{% if user.is_authenticated %}
 <div>
-  <script
-    src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-    defer
-  ></script>
   <script>
     function linkNavigator() {
       return {
@@ -115,43 +112,10 @@
         </div>
 
         <div class="flex items-center">
-          <div x-data="{ dropdownOpen: false }" class="relative">
-            <button
-              @click="dropdownOpen = ! dropdownOpen"
-              class="bg-indigo-500 relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none"
-            >
-              <span class="text-white">A</span>
-            </button>
-
-            <div
-              x-show="dropdownOpen"
-              @click="dropdownOpen = false"
-              class="fixed inset-0 h-full w-full z-10"
-              style="display: none"
-            ></div>
-
-            <div
-              x-show="dropdownOpen"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10"
-              style="display: none"
-            >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-                >Profile</a
-              >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-                >Products</a
-              >
-              <a
-                href="{% url 'logout' %}"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-                >Logout</a
-              >
-            </div>
-          </div>
+            <a href="{% url 'home' %}" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200"
+              >Home</a>
+              <a href="{% url 'logout' %}" style="margin-left: 10px;" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-red-600 bg-red-100 hover:bg-red-200"
+              >Logout</a>
         </div>
       </header>
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
@@ -165,4 +129,13 @@
     </div>
   </div>
 </div>
+{% else %}
+
+<div style="margin-top: 20px; margin-left: 20px">
+  <h3>User not authenticated!!</h3>
+  <a href="{% url 'home' %}" style="text-decoration: underline; color: blue">Home</a>
+  <a href="{% url 'login' %}" style="margin-left: 10px; text-decoration: underline; color: blue">Admin Login</a>
+</div>
+
+{% endif %}
 {% endblock %}
