@@ -1,5 +1,5 @@
 from django.test import TestCase
-from genre_classification.predict import predict
+from .test_predict import predict
 
 class PredictionTestCase(TestCase):
     def test_predict(self):
