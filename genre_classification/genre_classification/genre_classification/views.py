@@ -17,6 +17,8 @@ from keras import callbacks
 from django.shortcuts import render
 from .forms import DocumentForm
 from .predict import predict
+from django.shortcuts import redirect
+from django.urls import reverse
 
 def handle_file_upload(request):
     if request.method == 'POST':
@@ -93,3 +95,19 @@ def check_user_data_db():
         cur.execute(create_table_sql)
     except Exception as e:
         print(e)
+
+
+def handle_prediction_data(request):
+    if request.method == 'POST':
+
+        # genre = request.POST['QueryDict']
+        print("--------------------")
+        print(request.POST)
+
+        # tuple_data = request.POST.tuple_data
+        # print(tuple_data)
+        print('--------------------')
+
+
+    return render(request, 'genre_classification/home.html')
+    # return redirect('')
