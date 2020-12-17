@@ -66,6 +66,13 @@ RUN source /venv/bin/activate && \
 RUN source /venv/bin/activate && \
 	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('shab', 'shab@myproject.com', '1234'); User.objects.create_superuser('haider', 'haider@myproject.com', '1234'); User.objects.create_superuser('gagan', 'gagan@myproject.com', '1234')" | python3 manage.py shell
 
+# Run the tests 
+
+RUN source /venv/bin/activate && \
+	python3 manage.py test genre_classification
+
+RUN source /venv/bin/activate && \
+	python3 manage.py test admins
 
 # Start the gunicorn for running the application server
 

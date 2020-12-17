@@ -3,5 +3,5 @@ from genre_classification.predict import predict
 
 class PredictionTestCase(TestCase):
     def test_predict(self):
-        prediction = predict("genre_classification/tests/test_song/blues_train.wav")
-        self.assertEqual("blues", prediction[0])
+        prediction, label_percentages, tuple_data = predict("genre_classification/tests/test_song/blues_train.wav")
+        self.assertEqual("blues", prediction['label'])
