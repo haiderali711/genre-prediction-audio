@@ -83,6 +83,7 @@ def admin_view(request):
                     raise Exception('The data is invalid (features are missing or malformed)')
             except Exception as e:
                 errors = e
+                print(e)
 
             return render(request, 'admins/admins.html',
                           {'models': models, 'errors': errors, 'active_model': active_model})

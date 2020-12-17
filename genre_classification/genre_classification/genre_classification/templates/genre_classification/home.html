@@ -21,25 +21,28 @@
                             </a>
                         </div>
                     </div>
-                    {% if user.is_authenticated == True %}
-                    <div>
-                        <a href="{% url 'admin' %}"
-                           class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
-                            Admin Page
-                        </a>
-                    </div>
-                    {% endif %}
-                    <div>
+
+                    <a href="{% url 'predictions' %}" style="margin-right: 10px;"
+                       class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
+                        predictions
+                    </a>
+
+                    <div class="flex items-center">
                         {% if user.is_authenticated == False %}
                         <a href="{% url 'login' %}"
                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
                             Admin Login
                         </a>
                         {% else %}
+                        <a href="{% url 'admin' %}" style="margin-right: 10px;"
+                           class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
+                            Admin
+                        </a>
                         <a href="{% url 'logout' %}"
                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-blue-600 bg-blue-100 hover:bg-blue-200">
                             Logout
                         </a>
+
                         {% endif %}
                     </div>
                 </nav>
@@ -56,7 +59,7 @@
                     </p>
 
                     {% if request.get_full_path == "/" %}
-                        {% include 'genre_classification/file_upload.html' %}
+                    {% include 'genre_classification/file_upload.html' %}
                     {% endif %}
                 </div>
             </main>
@@ -68,7 +71,7 @@
              src="https://cdn.dribbble.com/users/19849/screenshots/11401249/media/3387dd438c71a1f81749c0c0b4588f26.png"
              alt="">
         {% elif request.get_full_path == "/login/" %}
-            {% include 'genre_classification/admin_login.html' %}
+        {% include 'genre_classification/admin_login.html' %}
         {% endif %}
     </div>
 </div>

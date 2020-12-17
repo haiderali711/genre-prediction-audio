@@ -29,6 +29,7 @@ urlpatterns = [
     path('activate_model/', activate_model, name='activate_model'),
     path('', handle_file_upload, name='home'),
     path('django/admin', admin.site.urls),
+    path('predictions/', auth_views.LoginView.as_view(template_name='genre_classification/predictions.html'), name='predictions'),
 ]
 
 if settings.DEBUG:

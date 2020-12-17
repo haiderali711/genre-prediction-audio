@@ -39,10 +39,11 @@ def handle_file_upload(request):
 
 
                 return render(request, 'genre_classification/predictions.html',
-                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages})
+                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data})
 
             except Exception as e:
                 form = DocumentForm()
+                print(e)
                 return render(request, 'genre_classification/home.html',
                               {'form': form, 'error': e})
     else:
