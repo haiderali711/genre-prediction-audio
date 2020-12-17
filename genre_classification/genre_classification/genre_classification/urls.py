@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from genre_classification.views import handle_file_upload
+from genre_classification.views import handle_file_upload,handle_prediction_data
 from admins.views import admin_view, activate_model
 
 urlpatterns = [
@@ -30,6 +30,7 @@ urlpatterns = [
     path('', handle_file_upload, name='home'),
     path('django/admin', admin.site.urls),
     path('predictions/', auth_views.LoginView.as_view(template_name='genre_classification/predictions.html'), name='predictions'),
+    path('predictions/data',handle_prediction_data,name='handle_prediction_data')
 ]
 
 if settings.DEBUG:
