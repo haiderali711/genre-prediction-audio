@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from pathlib import Path
+from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler 
@@ -59,9 +60,10 @@ def handle_file_upload(request):
 
 def check_user_data_db():
     BASE_DIR = Path(__file__).resolve().parent.parent
-    db_destination = os.path.join(BASE_DIR, 'admins/user_data/user_data.db')
+    db_destination = os.path.join(BASE_DIR, 'genre_classification/user_data/user_data.db')
     print('Thjis is the directory : ',db_destination)
 
+    con = None
     try:
         # Connect / create database
         con = sqlite3.connect(db_destination)
@@ -94,20 +96,42 @@ def check_user_data_db():
 
         cur.execute(create_table_sql)
     except Exception as e:
-        print(e)
+        print("error : ",e)
+    finally:
+        if con:
+            con.close()
 
 
 def handle_prediction_data(request):
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    db_destination = os.path.join(BASE_DIR, 'genre_classification/user_data/user_data.db')
+    print('Thjis is the directory : ',db_destination)
+
+    con = None
     if request.method == 'POST':
+        try:
+            # Connect / create database
+            con = sqlite3.connect(db_destination)
 
-        # genre = request.POST['QueryDict']
-        print("--------------------")
-        print(request.POST)
+            # Create table
+            cur = con.cursor()  # instantiate a cursor obj
 
-        # tuple_data = request.POST.tuple_data
-        # print(tuple_data)
-        print('--------------------')
+            genre = request.POST['genre']
+            tuple_data = request.GET.get('tuple_data')
+            tuple_data = tuple_data.replace("(","('"+str(datetime.now())+"', ")
+            tuple_data = tuple_data.replace(")", ", '"+genre+"')")
+            print(type(tuple_data))
+            print("--------------------")
+            sql_insertion_query = "INSERT INTO genrepath VALUES "+tuple_data+";"
+            cur.execute(sql_insertion_query) 
+            con.commit()
+            print(sql_insertion_query)
+            print('--------------------')
 
-
+        except Exception as e:
+            print("errrrorrrr : ",e)
+        finally:
+                if con:
+                    con.close()
     return render(request, 'genre_classification/home.html')
     # return redirect('')
