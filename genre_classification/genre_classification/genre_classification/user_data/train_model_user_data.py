@@ -1,10 +1,10 @@
 import os
 import errno
-
+import shutil
 import sqlite3
 import pandas as pd
 import numpy as np
-
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler 
@@ -17,24 +17,6 @@ from keras import callbacks
 
 import joblib
 
-
-def create_db_connection(db_file):
-    """
-    Create a database connection to the SQLite database
-    specified by the db_file
-    
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    connection = None
-    try:
-        connection = sqlite3.connect(db_file)
-    except sqlite3.Error as e:
-        print(e)
-
-    return connection
-
-
 def create_folder(folder):
     try:
         os.mkdir(folder)
@@ -43,35 +25,30 @@ def create_folder(folder):
             raise
 
 
-def create_dirtree(model_name):
-    ###########################
-    ### Step 1: Create dirs ###
-    ###########################
-    root_path = 'admins/models'
-    model_path = os.path.join(root_path, model_name)
-    
-    create_folder(root_path)    
-    try:
-        os.mkdir(model_path)
-    except OSError as e:
-        if e.errno == errno.EEXIST:
-            raise Exception("Model already exists!")
 
-    folders = ['data_scaler','database','label_encoder','prediction_model']
-    for folder in folders:
-        create_folder(os.path.join(model_path,folder))
-
-
-def train(db, model_name):    
+def train_with_user():    
     ############################################
     ### Step 2: Retrieve data from SQLite db ###
     ############################################
+    print('-------')
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    active_db = os.path.join(BASE_DIR, 'genre_classification/models/model_1/database/features.db')
+    additional_db = os.path.join(BASE_DIR, 'genre_classification/user_data/user_data.db')
+    print(active_db ,"\n\n", additional_db)
+    ## Get data from Database    
 
-    ## Get data from Database
-    db_connection = create_db_connection(db) # can be None!
+    db1_connection = sqlite3.connect('genre_classification/models/model_1/database/features.db') # can be None!
+    db2_connection = sqlite3.connect('genre_classification/user_data/user_data.db')
 
     # Read data as Pandas DataFrame
-    genres_data = pd.read_sql_query("SELECT * from genrepath", db_connection)
+    genres_data1 = pd.read_sql_query("SELECT * from genrepath", db1_connection)
+    genres_data2 = pd.read_sql_query("SELECT * from genrepath", db2_connection)
+
+    
+    frames = [genres_data1,genres_data2]
+
+    genres_data = pd.concat(frames)
+
     # Remove unnecessary data like 'filename'
     genres_data = genres_data.drop('filename', axis=1)
 
@@ -86,8 +63,12 @@ def train(db, model_name):
     ############################
     ### Step 3: Save encoder ###
     ############################
-
-    np.save(f'admins/models/{model_name}/label_encoder/classes.npy', encoder.classes_)
+    try:
+        os.remove('genre_classification/user_data/retrained/label_encoder/classes.npy')
+    except Exception as e:
+        print(e)
+    finally:
+        np.save(f'genre_classification/user_data/retrained/label_encoder/classes.npy', encoder.classes_)
 
     #############################################
     ### Step 4: Transform and select features ###
@@ -117,8 +98,12 @@ def train(db, model_name):
     ###########################
     ### Step 6: Save scaler ###
     ###########################
-
-    joblib.dump(scaler, f'admins/models/{model_name}/data_scaler/scaler.bin', compress=True)
+    try:
+        os.remove('genre_classification/user_data/retrained/data_scaler/scaler.bin')
+    except Exception as e:
+        print(e)
+    finally:
+        joblib.dump(scaler, f'genre_classification/user_data/retrained/data_scaler/scaler.bin', compress=True)
 
     ###########################
     ### Step 7: Train model ###
@@ -160,7 +145,15 @@ def train(db, model_name):
     ###########################
 
     print("Saving prediction model...")
-    model.save(f'admins/models/{model_name}/prediction_model')
+
+    try:
+        shutil.rmtree('genre_classification/user_data/retrained/prediction_model')
+    except Exception as e:
+        print('Delete Error', e)
+    finally:
+        create_folder('genre_classification/user_data/retrained/prediction_model')
+        model.save(f'genre_classification/user_data/retrained/prediction_model')
+    
     print("Done")
 
     test_loss, test_acc = model.evaluate(X_test,y_test)

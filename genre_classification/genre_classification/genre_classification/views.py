@@ -18,8 +18,7 @@ from keras import callbacks
 from django.shortcuts import render
 from .forms import DocumentForm
 from .predict import predict
-from django.shortcuts import redirect
-from django.urls import reverse
+from .user_data.train_model_user_data import train_with_user
 
 def handle_file_upload(request):
     if request.method == 'POST':
@@ -127,11 +126,20 @@ def handle_prediction_data(request):
             con.commit()
             print(sql_insertion_query)
             print('--------------------')
+            print("Starting retraining with user data..")
+            con.close()
+
+            accuracy, n_tracks = train_with_user()
+
+            print('Statistics for new model with user data:')
+            print("Accuracy:", accuracy)
+            print("Tracks:", n_tracks)
+            print('--------------------')
 
         except Exception as e:
             print("errrrorrrr : ",e)
-        finally:
-                if con:
-                    con.close()
+        # finally:
+        #         if con:
+        #             con.close()
     return render(request, 'genre_classification/home.html')
     # return redirect('')
