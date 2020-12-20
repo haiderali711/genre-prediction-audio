@@ -19,19 +19,27 @@ from django.shortcuts import render
 from .forms import DocumentForm
 from .predict import predict
 from .user_data.train_model_user_data import train_with_user
+from genre_classification.extract_features import extract
 
 def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             filename = request.FILES['document']
+            filename1 = filename
             print("\n*************")
             print("Processing " + str(filename) + "...")
             print("*************\n")
            
             try:
+                # Feature extraction
+                tuple_data = extract(filename)
+    
                  # Feature extraction
-                prediction,label_percentages,tuple_data = predict(filename)
+                prediction,label_percentages = predict(tuple_data,'standard')
+                print("printprint")
+                prediction_user,label_percentages_user = predict(tuple_data, 'user')
+                print("printprintafter")
 
                 print("\n*************")
                 print(filename, "is", prediction)
@@ -41,7 +49,8 @@ def handle_file_upload(request):
 
 
                 return render(request, 'genre_classification/predictions.html',
-                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data})
+                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data, 
+                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user})
 
             except Exception as e:
                 form = DocumentForm()
