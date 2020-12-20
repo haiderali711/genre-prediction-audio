@@ -5,14 +5,15 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from keras import models
 from sklearn import preprocessing
-from genre_classification.extract_features import extract
 
-def predict(filename):
-    # Feature extraction
-    tuple_data = extract(filename)
+def predict(tuple_data,typeUser):
     
     # Load ML model from file
-    model = models.load_model(
+    if typeUser is 'user':
+        model = models.load_model(
+        "genre_classification/user_data/retrained/prediction_model")
+    else:
+        model = models.load_model(
         "genre_classification/models/model_1/prediction_model")
 
     # Convert tuple to numpy array
@@ -22,7 +23,11 @@ def predict(filename):
     n_features = track.shape[0]
 
     # Scale features before prediction by importing scaler
-    scaler = joblib.load(
+    if typeUser is 'user':
+        scaler = joblib.load(
+        'genre_classification/user_data/retrained/data_scaler/scaler.bin')
+    else:
+        scaler = joblib.load(
         'genre_classification/models/model_1/data_scaler/scaler.bin')
     track_scaled = scaler.transform(track.reshape(1, -1))
 
@@ -45,7 +50,11 @@ def predict(filename):
 
     encoder = LabelEncoder()
     # Load encoder classes to retrieve the labels
-    encoder.classes_ = np.load(
+    if typeUser is 'user':
+        encoder.classes_ = np.load(
+        'genre_classification/user_data/retrained/label_encoder/classes.npy')
+    else:
+        encoder.classes_ = np.load(
         'genre_classification/models/model_1/label_encoder/classes.npy')
 
     # restore np.load for future normal usage
@@ -74,7 +83,7 @@ def predict(filename):
     label_percentages = label_percentages[label_percentages[:,1].argsort()[::-1]]
     print("label_ percentages", label_percentages)
 
-    return predicted_label, label_percentages, tuple_data
+    return predicted_label, label_percentages
 
 
 def prediction_values_normalized (range, prediction):
