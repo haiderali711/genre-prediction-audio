@@ -17,8 +17,12 @@
       <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
         <div class="object-cover object-center h-full w-full lg:flex-grow  flex flex-col  md:mb-0 items-center text-center justify-center">
             <br class="hidden lg:inline-block">
-            <div class="bg-gray-100 rounded-full h-40 w-50 flex items-center justify-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black-500 short-title" style="text-transform: uppercase;">{{prediction.label}}</h1>
+            <div class="rounded-full h-40 w-40 flex items-center justify-center short-title">
+                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black-500" style="text-transform: uppercase;">{{prediction.label}}</h1>
+            </div>
+            <br class="hidden lg:inline-block">
+            <div class="items-center self-center">
+                <canvas id="myChart" width="500" height="400" new_pred="{{label_percentages_user}}" stand_pred="{{label_percentages_stand}}"></canvas>
             </div>
             <br class="hidden lg:inline-block">
             <div class="items-center self-center ml-20 mr-20">
@@ -44,47 +48,7 @@
         </div>
       </div>
     </div>
-  </section>
-
-
-<section class="text-gray-700 body-font border-t border-gray-200">
-    <h1 class="tile">USER DATA PREDICTION</h1>
 </section>
-
-<section class="text-gray-700 body-font border-t border-gray-200">
-    <div class="container px-5 py-24 mx-auto flex flex-wrap">
-      <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
-        <div class="object-cover object-center h-full w-full lg:flex-grow  flex flex-col  md:mb-0 items-center text-center justify-center">
-            <br class="hidden lg:inline-block">
-            <div class="bg-gray-100 rounded-full h-40 w-50 flex items-center justify-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-black-500 short-title" style="text-transform: uppercase;">{{prediction_user.label}}</h1>
-            </div>
-            <br class="hidden lg:inline-block">
-            <div class="items-center self-center ml-20 mr-20">
-                <h3 class="mb-8 leading-relaxed">This prediction is done with data provided by our users</h3>
-            </div>
-        </div>
-    </div>
-      <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
-        
-        <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-            <div class="py-5">
-                {% for label in label_percentages_user %}
-                <section class="progress-line"><span
-                        class="progress-line__label">{{label.0}} - {{label.1}}%</span>
-                    <div class="progress-line__outer" style="background: rgb(239, 239, 239); height: 15px;">
-                        <div class="progress-line__inner"
-                             style="width: {{label.1}}%; transition: width 2s ease; -webkit-transition : width 5s ease;
-                             -moz-transition : width 5s ease; -o-transition : width 5s ease;"></div>
-                    </div>
-                </section>
-                {% endfor %}
-            </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
 
 <section class="text-gray-700 body-font relative bg-gray-100">
     <div class="container px-5 py-24 mx-auto flex">
@@ -116,6 +80,7 @@
         </div>
     </div>
 </section>
+
 
 <script>
     let genre = ''
@@ -171,42 +136,6 @@
         }
     }
 
-
-    .short-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        align-content: center;
-        text-align: center;
-        font-weight: normal;
-        width: 100%;
-        text-align: center;
-
-        font-size: 2vw;
-        background: linear-gradient(
-            -45deg,
-            #4bc0c8 25%,
-            #feac5e 25%,
-            #feac5e 50%,
-            #4bc0c8 50%,
-            #4bc0c8 75%,
-            #feac5e 75%,
-            #feac5e
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-size: 5px 5px;
-        background-position: 0 0;
-        animation: strip 1s linear infinite;
-    }
-
-    @keyframes strip {
-        100% {
-            background-position: 5px 0, 5px 0, 5px 0;
-        }
-    }
-
-
     .bg-img {
         position: relative;
         width: 100%;
@@ -245,5 +174,110 @@
 
     }
 
+    .short-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+        font-weight: normal;
+        width: 100%;
+        text-align: center;
+
+        font-size: 2vw;
+        background: linear-gradient(
+            -45deg,
+            #4bc0c8 25%,
+            #feac5e 25%,
+            #feac5e 50%,
+            #4bc0c8 50%,
+            #4bc0c8 75%,
+            #feac5e 75%,
+            #feac5e
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 5px 5px;
+        background-position: 0 0;
+        animation: strip 1s linear infinite;
+    }
+
+    @keyframes strip {
+        100% {
+            background-position: 5px 0, 5px 0, 5px 0;
+        }
+    }
+
+
 </style>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var a = document.getElementById('myChart').getAttribute('new_pred')
+    var b = document.getElementById('myChart').getAttribute('stand_pred')
+    var new_pred = JSON.parse(a)
+    var stand_pred = JSON.parse(b)
+    
+    var tags = ["0", "pop", 'disco', 'reggae', 'country', 'rock', 'jazz', 'hiphop', 'classical', 'blues', 'metal']
+    var newData = [0]
+    var oldData = [0]
+    for (let i = 1; i < tags.length ; i++){
+        let temp_tag = tags[i]
+        for ( var j=0; j < (tags.length-1); j++ ){
+            if (temp_tag === new_pred[j][0]){
+                newData.push(new_pred[j][1])
+                break;
+            }
+        }
+        for ( var j=0; j < (tags.length-1); j++ ){
+            if (temp_tag === stand_pred[j][0]){
+                oldData.push(stand_pred[j][1])
+                break;
+            }
+        }
+
+    }
+    console.log('new : ', new_pred)
+    console.log(tags)
+    console.log(newData)
+    console.log(oldData)
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: tags,
+            datasets: [
+                {
+                    data: oldData,
+                    borderColor: "#8e5ea2",
+                    label: "Standard Prediction Model",
+                    borderWidth: 3,
+                    fill : false
+                },
+                {
+                    data: newData,
+                    borderColor: "#3e95cd",
+                    label: "Prediction Model with User Data",
+                    borderWidth: 3,
+                    fill : false
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Standard Model vs User Data Model'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtONE: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+
 {% endblock %}

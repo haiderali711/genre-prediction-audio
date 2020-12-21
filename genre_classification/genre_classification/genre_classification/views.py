@@ -2,9 +2,11 @@ import os
 import errno
 import shutil
 import sqlite3
+import ast
 import pandas as pd
 import numpy as np
 import joblib
+import json
 from pathlib import Path
 from datetime import datetime
 from sklearn.model_selection import train_test_split
@@ -35,11 +37,15 @@ def handle_file_upload(request):
                 # Feature extraction
                 tuple_data = extract(filename)
     
-                 # Feature extraction
+                # Prediction data from the active model
                 prediction,label_percentages = predict(tuple_data,'standard')
-                print("printprint")
+                # Prediction data from the retrained model 
                 prediction_user,label_percentages_user = predict(tuple_data, 'user')
-                print("printprintafter")
+                label_percentages_user = label_percentages_user.tolist()
+                label_percentages_user = json.dumps(label_percentages_user)
+                label_percentages_stand = label_percentages
+                label_percentages_stand = label_percentages_stand.tolist()
+                label_percentages_stand = json.dumps(label_percentages_stand)
 
                 print("\n*************")
                 print(filename, "is", prediction)
@@ -50,7 +56,7 @@ def handle_file_upload(request):
 
                 return render(request, 'genre_classification/predictions.html',
                               {'form': form, 'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data, 
-                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user})
+                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user, 'label_percentages_stand':label_percentages_stand})
 
             except Exception as e:
                 form = DocumentForm()
@@ -126,6 +132,7 @@ def handle_prediction_data(request):
 
             genre = request.POST['genre']
             tuple_data = request.GET.get('tuple_data')
+            tuple_data_tupled = ast.literal_eval(tuple_data)
             tuple_data = tuple_data.replace("(","('"+str(datetime.now())+"', ")
             tuple_data = tuple_data.replace(")", ", '"+genre+"')")
             print(type(tuple_data))
@@ -145,10 +152,22 @@ def handle_prediction_data(request):
             print("Tracks:", n_tracks)
             print('--------------------')
 
+
+            # Prediction data from the active model
+            prediction,label_percentages = predict(tuple_data_tupled,'standard')
+            # Prediction data from the retrained model 
+            prediction_user,label_percentages_user = predict(tuple_data_tupled, 'user')
+            label_percentages_user = label_percentages_user.tolist()
+            label_percentages_user = json.dumps(label_percentages_user)
+            label_percentages_stand = label_percentages
+            label_percentages_stand = label_percentages_stand.tolist()
+            label_percentages_stand = json.dumps(label_percentages_stand)
+
         except Exception as e:
             print("errrrorrrr : ",e)
         # finally:
         #         if con:
         #             con.close()
-    return render(request, 'genre_classification/home.html')
+    return render(request, 'genre_classification/predictions.html',{'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data_tupled, 
+                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user , 'label_percentages_stand': label_percentages_stand})
     # return redirect('')
