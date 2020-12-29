@@ -1,8 +1,6 @@
 import os
 import sys
-# SqLite dependencies
 import sqlite3
-# Feature Extraction dependencies
 from extract_features import extract
 
 if len(sys.argv) == 1:
@@ -47,7 +45,6 @@ create_table_sql += "genre text)"
 
 cur.execute(create_table_sql)
 
-
 # Insert values
 insert_sql = "INSERT INTO genrepath ("
 insert_sql += str(header)[1:-1].replace("'", "")
@@ -62,7 +59,7 @@ lines = file1.readlines()
 for line in lines:
     filename = line.strip().split("\t", 1)[0].split("/", 4)[4]
     genre = line.strip().split("\t", 1)[1]
-    print("Processing" + path+ "/"+filename, "...")
+    print("Processing" + path + "/" + filename, "...")
 
     # Extract features using librosa
     tuple_data = extract(path + "/" + filename)

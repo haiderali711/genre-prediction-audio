@@ -1,6 +1,7 @@
 import sqlite3
 from django.forms import ValidationError
 
+
 def get_labels(db_path):
     connection = sqlite3.connect(db_path)
     cursor = connection.execute('select * from genrepath')
@@ -9,10 +10,12 @@ def get_labels(db_path):
     features.remove('genre')
     return features
 
+
 # Validate the newly uploaded model (extension)
 def validate_db_extension(value):
-        if not value.name.endswith('.db'):
-            raise ValidationError(u'Only .db files are allowed!')
+    if not value.name.endswith('.db'):
+        raise ValidationError(u'Only .db files are allowed!')
+
 
 # Validate the newly uploaded model
 def validate_db(db_path):
@@ -29,7 +32,8 @@ def validate_db(db_path):
         print(e)
         # Return false as there is some problem, the db of the new trained model should exist
         return False
-        
+
+
 # Validate the uploaded song 
 def validate_song(value):
     if not value.name.endswith('.wav'):

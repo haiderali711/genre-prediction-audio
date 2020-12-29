@@ -1,46 +1,35 @@
-import os
-import errno
-import shutil
-import sqlite3
 import ast
-import pandas as pd
-import numpy as np
-import joblib
 import json
-from pathlib import Path
+import os
+import sqlite3
 from datetime import datetime
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import StandardScaler 
-from sklearn.linear_model import LinearRegression
-from sklearn import metrics
-from keras import models
-from keras import layers
-from keras import callbacks
+from pathlib import Path
+
 from django.shortcuts import render
+from genre_classification.extract_features import extract
+
 from .forms import DocumentForm
 from .predict import predict
 from .user_data.train_model_user_data import train_with_user
-from genre_classification.extract_features import extract
+
 
 def handle_file_upload(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             filename = request.FILES['document']
-            filename1 = filename
             print("\n*************")
             print("Processing " + str(filename) + "...")
             print("*************\n")
-           
+
             try:
                 # Feature extraction
                 tuple_data = extract(filename)
-    
+
                 # Prediction data from the active model
-                prediction,label_percentages = predict(tuple_data,'standard')
+                prediction, label_percentages = predict(tuple_data, 'standard')
                 # Prediction data from the retrained model 
-                prediction_user,label_percentages_user = predict(tuple_data, 'user')
+                prediction_user, label_percentages_user = predict(tuple_data, 'user')
                 label_percentages_user = label_percentages_user.tolist()
                 label_percentages_user = json.dumps(label_percentages_user)
                 label_percentages_stand = label_percentages
@@ -53,10 +42,11 @@ def handle_file_upload(request):
 
                 check_user_data_db()
 
-
                 return render(request, 'genre_classification/predictions.html',
-                              {'form': form, 'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data, 
-                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user, 'label_percentages_stand':label_percentages_stand})
+                              {'form': form, 'prediction': prediction, 'label_percentages': label_percentages,
+                               'tuple_data': tuple_data,
+                               'prediction_user': prediction_user, 'label_percentages_user': label_percentages_user,
+                               'label_percentages_stand': label_percentages_stand})
 
             except Exception as e:
                 form = DocumentForm()
@@ -70,12 +60,10 @@ def handle_file_upload(request):
     })
 
 
-
-
 def check_user_data_db():
     BASE_DIR = Path(__file__).resolve().parent.parent
     db_destination = os.path.join(BASE_DIR, 'genre_classification/user_data/user_data.db')
-    print('Thjis is the directory : ',db_destination)
+    print('This is the directory : ', db_destination)
 
     con = None
     try:
@@ -110,7 +98,7 @@ def check_user_data_db():
 
         cur.execute(create_table_sql)
     except Exception as e:
-        print("error : ",e)
+        print("error : ", e)
     finally:
         if con:
             con.close()
@@ -119,9 +107,8 @@ def check_user_data_db():
 def handle_prediction_data(request):
     BASE_DIR = Path(__file__).resolve().parent.parent
     db_destination = os.path.join(BASE_DIR, 'genre_classification/user_data/user_data.db')
-    print('Thjis is the directory : ',db_destination)
+    print('This is the directory : ', db_destination)
 
-    con = None
     if request.method == 'POST':
         try:
             # Connect / create database
@@ -133,12 +120,12 @@ def handle_prediction_data(request):
             genre = request.POST['genre']
             tuple_data = request.GET.get('tuple_data')
             tuple_data_tupled = ast.literal_eval(tuple_data)
-            tuple_data = tuple_data.replace("(","('"+str(datetime.now())+"', ")
-            tuple_data = tuple_data.replace(")", ", '"+genre+"')")
+            tuple_data = tuple_data.replace("(", "('" + str(datetime.now()) + "', ")
+            tuple_data = tuple_data.replace(")", ", '" + genre + "')")
             print(type(tuple_data))
             print("--------------------")
-            sql_insertion_query = "INSERT INTO genrepath VALUES "+tuple_data+";"
-            cur.execute(sql_insertion_query) 
+            sql_insertion_query = "INSERT INTO genrepath VALUES " + tuple_data + ";"
+            cur.execute(sql_insertion_query)
             con.commit()
             print(sql_insertion_query)
             print('--------------------')
@@ -152,11 +139,10 @@ def handle_prediction_data(request):
             print("Tracks:", n_tracks)
             print('--------------------')
 
-
             # Prediction data from the active model
-            prediction,label_percentages = predict(tuple_data_tupled,'standard')
+            prediction, label_percentages = predict(tuple_data_tupled, 'standard')
             # Prediction data from the retrained model 
-            prediction_user,label_percentages_user = predict(tuple_data_tupled, 'user')
+            prediction_user, label_percentages_user = predict(tuple_data_tupled, 'user')
             label_percentages_user = label_percentages_user.tolist()
             label_percentages_user = json.dumps(label_percentages_user)
             label_percentages_stand = label_percentages
@@ -164,10 +150,8 @@ def handle_prediction_data(request):
             label_percentages_stand = json.dumps(label_percentages_stand)
 
         except Exception as e:
-            print("errrrorrrr : ",e)
-        # finally:
-        #         if con:
-        #             con.close()
-    return render(request, 'genre_classification/predictions.html',{'prediction': prediction , 'label_percentages': label_percentages, 'tuple_data': tuple_data_tupled, 
-                              'prediction_user': prediction_user , 'label_percentages_user': label_percentages_user , 'label_percentages_stand': label_percentages_stand})
-    # return redirect('')
+            print("error: ", e)
+    return render(request, 'genre_classification/predictions.html',
+                  {'prediction': prediction, 'label_percentages': label_percentages, 'tuple_data': tuple_data_tupled,
+                   'prediction_user': prediction_user, 'label_percentages_user': label_percentages_user,
+                   'label_percentages_stand': label_percentages_stand})

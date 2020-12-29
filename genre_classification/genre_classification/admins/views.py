@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from .data_validation import validate_db
 from .forms import RetrainForm, RetrainFormFile
 from .models import MLModel
-from .train_model import train, create_dirtree
+from .train_model import train, create_dir_tree
 
 
 def admin_view(request):
@@ -38,7 +38,7 @@ def admin_view(request):
 
             # Create the directory tree for the model
             try:
-                create_dirtree(str(model))
+                create_dir_tree(str(model))
 
                 # Deactivate the previous model before setting the new one as active
                 if active_model is not None:
@@ -51,7 +51,7 @@ def admin_view(request):
                         destination.write(chunk)  # Add exception try catch to delete created folders
 
                 #######################
-                ### Data Validation ###
+                # Data Validation
                 if validate_db(db_path):
                     print("Data validation has been passed")
 

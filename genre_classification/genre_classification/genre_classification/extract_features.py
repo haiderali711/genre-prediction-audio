@@ -1,10 +1,11 @@
 import librosa
 import numpy as np
 
+
 # Extract features using librosa
 def extract(audio_file):
     y, sr = librosa.load(audio_file, mono=True, duration=30)
-    
+
     chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
     rmse = librosa.feature.rms(y=y)
     spec_cent = librosa.feature.spectral_centroid(y=y, sr=sr)
@@ -14,7 +15,7 @@ def extract(audio_file):
     mfcc = librosa.feature.mfcc(y=y, sr=sr)
     harmonics, perceptual = librosa.effects.hpss(y)
     tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
-    
+
     # Building tuple to insert
     tuple_data = f'{np.mean(chroma_stft)} {np.var(chroma_stft)} '
     tuple_data += f'{np.mean(rmse)} {np.var(rmse)} '
@@ -25,8 +26,8 @@ def extract(audio_file):
     tuple_data += f'{np.mean(harmonics)} {np.var(harmonics)} '
     tuple_data += f'{np.mean(perceptual)} {np.var(perceptual)} '
     tuple_data += f'{tempo} '
-    
+
     for e in mfcc:
         tuple_data += f' {np.mean(e)} {np.var(e)}'
-        
-    return  tuple(tuple_data.split())
+
+    return tuple(tuple_data.split())

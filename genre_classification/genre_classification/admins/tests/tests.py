@@ -1,11 +1,12 @@
-from django.test import TestCase
-from admins.train_model import train, create_dirtree
-from os import path
-from genre_classification.predict import predict
 import shutil
+from os import path
+
+from admins.train_model import train, create_dirtree
+from django.test import TestCase
 
 model_name = "__test_model"
 models_path = "admins/models/"
+
 
 class PredictionTestCase(TestCase):
     def test_model_creation(self):
@@ -34,4 +35,3 @@ class PredictionTestCase(TestCase):
             shutil.rmtree(models_path + model_name)
         except OSError as e:
             print("Error: %s : %s" % (models_path + model_name, e.strerror))
-        
